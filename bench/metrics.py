@@ -8,10 +8,11 @@ settings and APC) and jdca.ridge_dca. Truth: Cb-Cb < 8 A (Ca for Gly) in the AFD
   tolerant         fraction of pairs with a true contact within +-1 in i and in j;
   patch recall     true contacts linked when within +-2 in i and in j form patches; fraction of the patches hit;
   redundancy       correct predictions per hit patch (lower = the correct ones are spread over more patches);
-  SSE-pair         helix and strand segments of >= 3 residues (biotite's P-SEA); fraction of the segment pairs in contact that are hit;
+  SSE-pair         DSSP helix (H, G, I) and strand (E, B) segments of >= 3 residues; fraction of segment pairs in contact that are hit;
 and the average precision over the whole ranking.
 
-Run bench/benchmark.py or bench/windowed.py first (they write bench/out/<id>/aln.fasta).
+Run bench/benchmark.py or bench/windowed.py first (they write bench/out/<id>/aln.fasta). Needs DSSP's mkdssp (conda-forge package
+dssp; tested with 4.6.1), on the PATH or given with --mkdssp.
 
     python bench/metrics.py P34884 P0A9S1 P57740 P49588 P53396 P29474 P17301
 """
@@ -32,12 +33,14 @@ METHODS = {'gaussdca': lambda f: jdca.gaussdca(jdca.read_alignment(f)),
            'humphreys': lambda f: jdca.humphreys_dca(jdca.read_alignment(f, 1.0)),
            'ridge': lambda f: jdca.ridge_dca(jdca.read_alignment(f, 1.0))}
 KS = ('L/5', 'L/2', 'L')
+SSE3 = {'H': 'a', 'G': 'a', 'I': 'a', 'E': 'b', 'B': 'b'}           # DSSP's 8 states -> helix 'a', strand 'b' (anything else: 'c')
 
 
-def structure(cif):
-    """Cb coordinates (Ca for Gly), pLDDT and the P-SEA helix / strand assignment per residue of the AFDB model."""
+def structure(cif, mkdssp='mkdssp'):
+    """Cb coordinates (Ca for Gly), pLDDT and the DSSP helix / strand assignment per residue of the AFDB model."""
     import biotite.structure as bs
     import biotite.structure.io.pdbx as pdbx
+    from biotite.application.dssp import DsspApp
     a = pdbx.get_structure(pdbx.CIFFile.read(cif), model=1, extra_fields=['b_factor'])
     a = a[a.hetero == False]                                    # noqa: E712
     xyz, plddt = [], []
@@ -46,7 +49,9 @@ def structure(cif):
         p = p if len(p) else r[r.atom_name == 'CA']
         xyz.append(p.coord[0])
         plddt.append(p.b_factor[0])
-    return np.array(xyz), np.array(plddt), np.asarray(bs.annotate_sse(a))
+    sse = DsspApp.annotate_sse(a, mkdssp)
+    assert len(sse) == len(xyz), (cif, len(sse), len(xyz))
+    return np.array(xyz), np.array(plddt), np.array([SSE3.get(s, 'c') for s in sse])
 
 
 def segments(sse, minlen=3):
@@ -115,12 +120,13 @@ def evaluate(scores, xyz, plddt, sse):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('ids', nargs='+')
+    ap.add_argument('--mkdssp', default='mkdssp', help='the DSSP program (default: mkdssp on the PATH)')
     a = ap.parse_args()
     path = os.path.join(HERE, 'out', 'metrics.json')
     res = json.load(open(path)) if os.path.exists(path) else {}
     for uid in a.ids:
         fasta = os.path.join(HERE, 'out', uid, 'aln.fasta')
-        xyz, plddt, sse = structure(sorted(glob.glob(os.path.join(HERE, 'data', uid, 'AF-*-model_v*.cif')))[-1])
+        xyz, plddt, sse = structure(sorted(glob.glob(os.path.join(HERE, 'data', uid, 'AF-*-model_v*.cif')))[-1], a.mkdssp)
         res[uid] = {}
         for m, fn in METHODS.items():
             res[uid][m], res[uid]['info'] = evaluate(fn(fasta).scores, xyz, plddt, sse)

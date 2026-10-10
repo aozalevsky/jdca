@@ -90,7 +90,7 @@ Top-k precision is one view of a contact map. On seven AlphaFold DB entries (the
 * *long-range*: precision among the top pairs with |i − j| ≥ 24;
 * *tolerant*: the fraction of pairs with a true contact within ±1 in i and in j;
 * *patch recall*: true contacts within ±2 of each other in i and in j form patches; the fraction of patches hit;
-* *SSE-pair*: helix and strand segments of ≥ 3 residues (P-SEA, from biotite); the fraction of segment pairs in contact that are hit;
+* *SSE-pair*: DSSP helix (H, G, I) and strand (E, B) segments of ≥ 3 residues; the fraction of segment pairs in contact that are hit;
 * *redundancy*: correct predictions per hit patch (lower means the correct predictions are spread over more patches);
 * *average precision* over the whole ranking.
 
@@ -112,9 +112,9 @@ lowest; values equal at the three decimals shown are all bold):
 | patch recall | L/5 | 0.155 | **0.166** | 0.164 | 0.161 |
 | patch recall | L/2 | **0.270** | 0.261 | 0.265 | **0.270** |
 | patch recall | L | **0.352** | 0.346 | 0.351 | 0.351 |
-| SSE-pair | L/5 | 0.340 | 0.342 | 0.346 | **0.349** |
-| SSE-pair | L/2 | 0.495 | **0.511** | 0.504 | 0.498 |
-| SSE-pair | L | **0.591** | 0.577 | 0.570 | 0.581 |
+| SSE-pair | L/5 | **0.294** | 0.279 | 0.291 | 0.286 |
+| SSE-pair | L/2 | **0.430** | 0.428 | 0.422 | 0.421 |
+| SSE-pair | L | 0.522 | 0.510 | 0.502 | **0.523** |
 | redundancy | L/5 | 1.399 | **1.361** | 1.370 | 1.403 |
 | redundancy | L/2 | 1.578 | 1.578 | **1.530** | 1.593 |
 | redundancy | L | 1.863 | 1.856 | **1.816** | 1.859 |
@@ -124,7 +124,7 @@ lowest; values equal at the three decimals shown are all bold):
 * The four means of every precision, recall and coverage row lie within 0.023 of each other (the redundancy rows within 0.063),
   and the best estimator changes from row to row.
 * On single targets the order keeps changing. Of the 112 target × metric cases (redundancy excluded), each estimator is the best
-  (ties counted for each) in: ridge 50, adaptive 37, GaussDCA 32, Humphreys et al. 18.
+  (ties counted for each) in: ridge 52, adaptive 36, GaussDCA 35, Humphreys et al. 15.
 * Seven targets are far too few to separate differences of this size, so the bold marks the best mean here, not a better method.
 
 ## Time
@@ -175,7 +175,7 @@ apptainer build containers/tf1_gpu.sif \
 python bench/benchmark.py P34884 P0A9S1 P57740     # GaussDCA.jl vs jdca; writes the aligned inputs
 python bench/compare.py P34884 P0A9S1 P57740       # their script, then jdca's other estimators
 python bench/windowed.py P0A9S1 P57740 P49588 P53396 P29474 P17301   # writes the inputs of the four longer chains
-python bench/metrics.py P34884 P0A9S1 P57740 P49588 P53396 P29474 P17301
+python bench/metrics.py P34884 P0A9S1 P57740 P49588 P53396 P29474 P17301   # needs DSSP's mkdssp (tested with 4.6.1)
 ```
 
 The numbers are in `bench/out/results.json`, `bench/out/compare.json` and `bench/out/metrics.json`. For timings to compare, run

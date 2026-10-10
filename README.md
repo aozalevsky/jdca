@@ -76,7 +76,7 @@ pip install -e ".[cuda]"      # with JAX for CUDA 12
 ```
 
 Requires Python ≥ 3.10, NumPy, SciPy and JAX (tested with JAX 0.9.2, and with JAX 0.4.30 on the CPU). The benchmark scripts also need biotite
-(`pip install -e ".[bench]"`).
+(`pip install -e ".[bench]"`), and `bench/metrics.py` needs DSSP's `mkdssp` (conda-forge package `dssp`).
 
 ## Use
 
