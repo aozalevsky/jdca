@@ -1,0 +1,36 @@
+# The test suite on the CPU (GitHub's runners have no GPU: the GPU tests are skipped), on the oldest Python jdca supports and a
+# recent one, each with the newest NumPy, SciPy and JAX that install there. Runs on pushes and pull requests to main, and before
+# every upload to PyPI (pypi.yml).
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  cpu:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10', '3.14']
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install ".[test]"
+      - run: python -m pip freeze | grep -iE '^(jdca|jax|jaxlib|numpy|scipy)( @|==)'
+      - run: pytest -rs tests                # the installed package (pytest, unlike python -m pytest, does not import from here)
+        env:
+          PYTHONPATH: tests
