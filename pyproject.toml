@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jdca"
+dynamic = ["version"]
+description = "Performance-oriented re-implementation of GaussDCA.jl in JAX"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Arthur Zalevsky" }]
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.26", "scipy>=1.11", "jax>=0.4.30"]
+
+[project.optional-dependencies]
+cuda = ["jax[cuda12]>=0.4.30"]
+test = ["pytest"]
+bench = ["biotite"]
+
+[project.urls]
+Homepage = "https://github.com/aozalevsky/jdca"
+Issues = "https://github.com/aozalevsky/jdca/issues"
+
+[project.scripts]
+jdca = "jdca.cli:main"
+jdca-server = "jdca.server:main"
+
+[tool.setuptools]
+packages = ["jdca"]
+
+[tool.setuptools.dynamic]
+version = { attr = "jdca.__version__" }

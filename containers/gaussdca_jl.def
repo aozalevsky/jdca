@@ -1,0 +1,111 @@
+Bootstrap: docker
+# Julia 1.10 LTS: tag julia:1.10.12-bookworm, pinned by its multi-arch index digest
+# (Docker Hub, 2026-10-06; apptainer does not accept tag@digest, so the digest alone).
+From: julia@sha256:2b7928eb932b0cf1846483e853c22237df44e98dfb113d9f22fd5e6dde21e984
+
+%help
+    The ORIGINAL GaussDCA.jl (Carlo Baldassi), frozen for benchmarking.
+
+      GaussDCA  2.0.0  git 067016f035d13e0cc9eb7be7a3d8cbe857a322b3 (not in the General
+                       registry; installed from https://github.com/carlobaldassi/GaussDCA.jl)
+      DCAUtils  1.1.0   FastaIO 1.1.0   GZip 0.6.2   Julia 1.10.12
+
+    Read-only depot /opt/julia_depot, project /opt/gaussdca (Project.toml + Manifest.toml),
+    resolved versions in /opt/gaussdca/VERSIONS.txt. All packages are precompiled at build
+    time (multi-target pkgimages), so a run never precompiles.
+
+      apptainer exec --cleanenv --env JULIA_NUM_THREADS=8 gaussdca_jl.sif \
+          julia --startup-file=no run_gdca.jl aln.fasta ranking.txt
+
+%labels
+    org.opencontainers.image.title GaussDCA.jl (original)
+    org.opencontainers.image.source https://github.com/carlobaldassi/GaussDCA.jl
+    gaussdca.version 2.0.0
+    gaussdca.commit 067016f035d13e0cc9eb7be7a3d8cbe857a322b3
+    dcautils.version 1.1.0
+    fastaio.version 1.1.0
+    gzip.version 0.6.2
+    julia.version 1.10.12
+
+%environment
+    # Image depot first, then the depots bundled with Julia (stdlib caches). The user's
+    # ~/.julia is deliberately NOT on the path: no host packages, caches or startup.jl.
+    export JULIA_DEPOT_PATH=/opt/julia_depot:/usr/local/julia/local/share/julia:/usr/local/julia/share/julia
+    export JULIA_PROJECT=/opt/gaussdca
+    export JULIA_PKG_OFFLINE=true
+    export JULIA_PKG_PRECOMPILE_AUTO=0
+
+%post
+    set -eu
+    export PATH=/usr/local/julia/bin:$PATH
+    export JULIA_DEPOT_PATH=/opt/julia_depot:/usr/local/julia/local/share/julia:/usr/local/julia/share/julia
+    export JULIA_PROJECT=/opt/gaussdca
+    export JULIA_PKG_PRECOMPILE_AUTO=0
+    export JULIA_NUM_PRECOMPILE_TASKS=8
+    # Multi-versioned pkgimages (the target string of the official Julia 1.10 x86_64 build),
+    # so the caches are valid on any x86_64 host, not only on the build machine.
+    export JULIA_CPU_TARGET='generic;sandybridge,-xsaveopt,clone_all;haswell,-rdrnd,base(1)'
+    mkdir -p /opt/julia_depot /opt/gaussdca
+
+    cat > /opt/gaussdca/install.jl <<'EOF'
+using Pkg
+Pkg.Registry.add("General")
+# Every non-stdlib package pinned to an exact version (GaussDCA by commit), so the
+# resolution is independent of the registry state at build time.
+Pkg.add([
+    PackageSpec(name="GZip",     uuid="92fee26a-97fe-5a0c-ad85-20a5f3185b63", version=v"0.6.2"),
+    PackageSpec(name="FastaIO",  uuid="a0c94c4b-ebed-5953-b5fc-82fe598ac79f", version=v"1.1.0"),
+    PackageSpec(name="DCAUtils", uuid="e41cd558-3099-4f6e-a65d-5336857e40aa", version=v"1.1.0"),
+    PackageSpec(url="https://github.com/carlobaldassi/GaussDCA.jl.git",
+                rev="067016f035d13e0cc9eb7be7a3d8cbe857a322b3"),
+])
+want = Dict("GaussDCA" => v"2.0.0", "DCAUtils" => v"1.1.0", "FastaIO" => v"1.1.0", "GZip" => v"0.6.2")
+deps = Dict(d.name => d for d in values(Pkg.dependencies()))
+for (n, v) in want
+    deps[n].version == v || error("$n resolved to $(deps[n].version), expected $v")
+end
+deps["GaussDCA"].git_revision == "067016f035d13e0cc9eb7be7a3d8cbe857a322b3" ||
+    error("GaussDCA at unexpected revision $(deps["GaussDCA"].git_revision)")
+Pkg.precompile(; strict=true)
+open("/opt/gaussdca/VERSIONS.txt", "w") do io
+    println(io, "julia ", VERSION, "  (", Sys.MACHINE, ")")
+    println(io, "JULIA_CPU_TARGET (pkgimages) ", ENV["JULIA_CPU_TARGET"])
+    for d in sort(collect(values(deps)); by = d -> d.name)
+        println(io, rpad(d.name, 30), rpad(something(d.version, "stdlib"), 10),
+                d.is_direct_dep ? "direct  " : "        ",
+                d.tree_hash === nothing ? "" : "tree $(d.tree_hash)",
+                d.git_revision === nothing ? "" : "  git $(d.git_revision)")
+    end
+end
+EOF
+    julia --startup-file=no /opt/gaussdca/install.jl
+
+    # Frozen image: drop the registry and the bare git clone (only Pkg operations need them).
+    rm -rf /opt/julia_depot/registries /opt/julia_depot/clones /opt/julia_depot/logs \
+           /opt/julia_depot/scratchspaces
+    chmod -R a+rX /opt/julia_depot /opt/gaussdca
+
+    # Smoke test on a synthetic alignment (also proves the caches load without recompiling).
+    julia --startup-file=no -e '
+        for p in (:GaussDCA, :DCAUtils, :FastaIO, :GZip)
+            Base.isprecompiled(Base.identify_package(String(p))) || error("$p not precompiled")
+        end
+        using GaussDCA, Random
+        rng = Random.MersenneTwister(1)
+        f = tempname() * ".fasta"
+        open(f, "w") do io
+            for k in 1:60
+                println(io, ">s$k\n", String(rand(rng, collect("ACDEFGHIKLMNPQRSTVWY-"), 30)))
+            end
+        end
+        R = gDCA(f)
+        length(R) == (30-5)*(30-5+1)÷2 || error("unexpected ranking length")
+        rm(f)
+        println("smoke test OK: ", length(R), " pairs")'
+    cat /opt/gaussdca/VERSIONS.txt
+
+%test
+    julia --startup-file=no -e 'using GaussDCA; println("GaussDCA ", pkgversion(GaussDCA), " loads")'
+
+%runscript
+    exec julia --startup-file=no "$@"

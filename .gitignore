@@ -1,0 +1,21 @@
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.venv/
+venv/
+build/
+dist/
+.DS_Store
+*.log
+*.sif
+containers/.build*/
+bench/data/
+# per-run outputs (rankings, inputs, logs); the measurements the docs cite are tracked
+bench/out/*
+!bench/out/results.json
+!bench/out/compare.json
+!bench/out/windowed.json
+!bench/out/metrics.json

@@ -1,0 +1,509 @@
+{
+ "P34884": {
+  "M_file": 2548,
+  "M": 2548,
+  "L": 115,
+  "plddt_ge70": 1.0,
+  "gaussdca_jl": {
+   "t1": {
+    "DCAUtils": {
+     "git_tree_sha1": "434e75b436dfb1921224484adcbb809aeed93568",
+     "version": "1.1.0"
+    },
+    "FastaIO": {
+     "git_tree_sha1": "0133228b2353194fe0703d8cba182f832e11bb54",
+     "version": "1.1.0"
+    },
+    "GaussDCA": {
+     "git_rev": "067016f035d13e0cc9eb7be7a3d8cbe857a322b3",
+     "git_tree_sha1": "f306a33661bdfbf133d24c3772734caff8da1f4c",
+     "version": "2.0.0"
+    },
+    "M": 2548,
+    "Meff": 620.4918974111298,
+    "N": 115,
+    "blas": "libopenblas64_.so",
+    "blas_threads": 1,
+    "cold_jit_s": 7.483705559,
+    "cpu": "Intel(R) Xeon(R) Silver 4214R CPU @ 2.40GHz",
+    "identical_runs": true,
+    "input": "bench/out/P34884/aln.fasta",
+    "julia": "1.10.12",
+    "max_gap_fraction": 0.9,
+    "n_pairs": 6105,
+    "nthreads": 1,
+    "output": "bench/out/P34884/jl_t1.txt",
+    "pseudocount": 0.8,
+    "t_gc_s": 0.089753471,
+    "t_gdca_cold_s": 8.497884492,
+    "t_gdca_warm_s": 0.836183535,
+    "t_load_s": 0.07284092903137207,
+    "t_stats_s": 0.1599259376525879,
+    "t_total_s": 10.586343050003052,
+    "t_write_s": 0.7874090671539307,
+    "theta": 0.4168420047976666,
+    "theta_arg": "auto",
+    "tool": "GaussDCA.jl",
+    "warm_alloc_bytes": 322226288,
+    "warm_gc_s": 0.02143202,
+    "warm_jit_s": 0.0,
+    "process_wall": 12.438957801000015,
+    "one_off": 11.353094857347427
+   },
+   "t8": {
+    "DCAUtils": {
+     "git_tree_sha1": "434e75b436dfb1921224484adcbb809aeed93568",
+     "version": "1.1.0"
+    },
+    "FastaIO": {
+     "git_tree_sha1": "0133228b2353194fe0703d8cba182f832e11bb54",
+     "version": "1.1.0"
+    },
+    "GaussDCA": {
+     "git_rev": "067016f035d13e0cc9eb7be7a3d8cbe857a322b3",
+     "git_tree_sha1": "f306a33661bdfbf133d24c3772734caff8da1f4c",
+     "version": "2.0.0"
+    },
+    "M": 2548,
+    "Meff": 620.4918974111298,
+    "N": 115,
+    "blas": "libopenblas64_.so",
+    "blas_threads": 8,
+    "cold_jit_s": 9.777753716,
+    "cpu": "Intel(R) Xeon(R) Silver 4214R CPU @ 2.40GHz",
+    "identical_runs": true,
+    "input": "bench/out/P34884/aln.fasta",
+    "julia": "1.10.12",
+    "max_gap_fraction": 0.9,
+    "n_pairs": 6105,
+    "nthreads": 8,
+    "output": "bench/out/P34884/jl_t8.txt",
+    "pseudocount": 0.8,
+    "t_gc_s": 0.080629103,
+    "t_gdca_cold_s": 7.432615773,
+    "t_gdca_warm_s": 0.366968804,
+    "t_load_s": 0.0562589168548584,
+    "t_stats_s": 0.08336305618286133,
+    "t_total_s": 8.720432043075562,
+    "t_write_s": 0.562553882598877,
+    "theta": 0.41684200479766703,
+    "theta_arg": "auto",
+    "tool": "GaussDCA.jl",
+    "warm_alloc_bytes": 322527440,
+    "warm_gc_s": 0.036762722,
+    "warm_jit_s": 0.0,
+    "process_wall": 10.397896937000041,
+    "one_off": 9.86693597381718
+   }
+  },
+  "jdca": {
+   "gpu_one_off": 1.7074944020000657,
+   "cpu_one_off": 1.4981945829999859,
+   "gpu_batch": 0.03556842000034521,
+   "cpu_batch": 0.2867495689997668,
+   "gpu_server": 0.19228625300002022,
+   "theta": 0.41684200479766714,
+   "meff": 620.4918974111307,
+   "adaptive_gpu_batch": 0.02917347700031314,
+   "adaptive_meff": 1601.895825215509,
+   "adaptive_pseudocount": 0.5
+  },
+  "agreement": {
+   "max_abs": 3.825581868951988e-05,
+   "max_rel": 1.5091124174757389e-05,
+   "spearman": 0.9999999968884536,
+   "topL_shared": 1.0
+  },
+  "precision_jl": {
+   "L/5@6": 0.5652173913043478,
+   "L/2@6": 0.49122807017543857,
+   "L@6": 0.41739130434782606,
+   "L/5@12": 0.6086956521739131,
+   "L/2@12": 0.49122807017543857,
+   "L@12": 0.40869565217391307,
+   "L/5@24": 0.6086956521739131,
+   "L/2@24": 0.47368421052631576,
+   "L@24": 0.40869565217391307
+  },
+  "precision_jdca": {
+   "L/5@6": 0.5652173913043478,
+   "L/2@6": 0.49122807017543857,
+   "L@6": 0.41739130434782606,
+   "L/5@12": 0.6086956521739131,
+   "L/2@12": 0.49122807017543857,
+   "L@12": 0.40869565217391307,
+   "L/5@24": 0.6086956521739131,
+   "L/2@24": 0.47368421052631576,
+   "L@24": 0.40869565217391307
+  },
+  "precision_ridge": {
+   "L/5@6": 0.6521739130434783,
+   "L/2@6": 0.5263157894736842,
+   "L@6": 0.391304347826087,
+   "L/5@12": 0.6521739130434783,
+   "L/2@12": 0.5087719298245614,
+   "L@12": 0.391304347826087,
+   "L/5@24": 0.5652173913043478,
+   "L/2@24": 0.45614035087719296,
+   "L@24": 0.3826086956521739
+  },
+  "precision_jdca_adaptive": {
+   "L/5@6": 0.6956521739130435,
+   "L/2@6": 0.47368421052631576,
+   "L@6": 0.3826086956521739,
+   "L/5@12": 0.6086956521739131,
+   "L/2@12": 0.43859649122807015,
+   "L@12": 0.4,
+   "L/5@24": 0.6086956521739131,
+   "L/2@24": 0.47368421052631576,
+   "L@24": 0.40869565217391307
+  },
+  "guard": {
+   "clean": true,
+   "start": "2026-10-09 20:16:11",
+   "wall_s": 46.3,
+   "cores": "10,2,3,5,9,1,11,6",
+   "other_gpu_seconds": 0,
+   "other_cpu_on_cores_max_share_10s": 0.127,
+   "other_cpu_machine_mean": 1.38
+  }
+ },
+ "P0A9S1": {
+  "M_file": 17508,
+  "M": 17507,
+  "L": 382,
+  "plddt_ge70": 1.0,
+  "gaussdca_jl": {
+   "t1": {
+    "DCAUtils": {
+     "git_tree_sha1": "434e75b436dfb1921224484adcbb809aeed93568",
+     "version": "1.1.0"
+    },
+    "FastaIO": {
+     "git_tree_sha1": "0133228b2353194fe0703d8cba182f832e11bb54",
+     "version": "1.1.0"
+    },
+    "GaussDCA": {
+     "git_rev": "067016f035d13e0cc9eb7be7a3d8cbe857a322b3",
+     "git_tree_sha1": "f306a33661bdfbf133d24c3772734caff8da1f4c",
+     "version": "2.0.0"
+    },
+    "M": 17507,
+    "Meff": 2546.1493354630643,
+    "N": 382,
+    "blas": "libopenblas64_.so",
+    "blas_threads": 1,
+    "cold_jit_s": 7.429167361,
+    "cpu": "Intel(R) Xeon(R) Silver 4214R CPU @ 2.40GHz",
+    "identical_runs": true,
+    "input": "bench/out/P0A9S1/aln.fasta",
+    "julia": "1.10.12",
+    "max_gap_fraction": 0.9,
+    "n_pairs": 71253,
+    "nthreads": 1,
+    "output": "bench/out/P0A9S1/jl_t1.txt",
+    "pseudocount": 0.8,
+    "t_gc_s": 0.280577304,
+    "t_gdca_cold_s": 34.242121244,
+    "t_gdca_warm_s": 26.107668921,
+    "t_load_s": 0.05581498146057129,
+    "t_stats_s": 6.615450859069824,
+    "t_total_s": 68.14517593383789,
+    "t_write_s": 0.6968450546264648,
+    "theta": 0.36518378381258804,
+    "theta_arg": "auto",
+    "tool": "GaussDCA.jl",
+    "warm_alloc_bytes": 3563860304,
+    "warm_gc_s": 0.296146975,
+    "warm_jit_s": 0.0,
+    "process_wall": 70.10548684499963,
+    "one_off": 37.10178976092981
+   },
+   "t8": {
+    "DCAUtils": {
+     "git_tree_sha1": "434e75b436dfb1921224484adcbb809aeed93568",
+     "version": "1.1.0"
+    },
+    "FastaIO": {
+     "git_tree_sha1": "0133228b2353194fe0703d8cba182f832e11bb54",
+     "version": "1.1.0"
+    },
+    "GaussDCA": {
+     "git_rev": "067016f035d13e0cc9eb7be7a3d8cbe857a322b3",
+     "git_tree_sha1": "f306a33661bdfbf133d24c3772734caff8da1f4c",
+     "version": "2.0.0"
+    },
+    "M": 17507,
+    "Meff": 2546.1493354630643,
+    "N": 382,
+    "blas": "libopenblas64_.so",
+    "blas_threads": 8,
+    "cold_jit_s": 9.712469095,
+    "cpu": "Intel(R) Xeon(R) Silver 4214R CPU @ 2.40GHz",
+    "identical_runs": true,
+    "input": "bench/out/P0A9S1/aln.fasta",
+    "julia": "1.10.12",
+    "max_gap_fraction": 0.9,
+    "n_pairs": 71253,
+    "nthreads": 8,
+    "output": "bench/out/P0A9S1/jl_t8.txt",
+    "pseudocount": 0.8,
+    "t_gc_s": 0.19868087,
+    "t_gdca_cold_s": 13.539076664,
+    "t_gdca_warm_s": 6.474271703,
+    "t_load_s": 0.056130170822143555,
+    "t_stats_s": 1.2235839366912842,
+    "t_total_s": 22.31864309310913,
+    "t_write_s": 0.692777156829834,
+    "theta": 0.3651837838125873,
+    "theta_arg": "auto",
+    "tool": "GaussDCA.jl",
+    "warm_alloc_bytes": 3565836208,
+    "warm_gc_s": 0.177703217,
+    "warm_jit_s": 0.0,
+    "process_wall": 24.212481760000173,
+    "one_off": 16.31594525030889
+   }
+  },
+  "jdca": {
+   "gpu_one_off": 2.35404478800001,
+   "cpu_one_off": 9.173429266999847,
+   "gpu_batch": 0.587255507000009,
+   "cpu_batch": 7.772344514999986,
+   "gpu_server": 0.870922857000096,
+   "theta": 0.36518378381258687,
+   "meff": 2546.1493354630993,
+   "adaptive_gpu_batch": 0.520007109999824,
+   "adaptive_meff": 7698.823718690739,
+   "adaptive_pseudocount": 0.5
+  },
+  "agreement": {
+   "max_abs": 0.00024857786594500997,
+   "max_rel": 7.124005880407783e-05,
+   "spearman": 0.9999999974458548,
+   "topL_shared": 1.0
+  },
+  "precision_jl": {
+   "L/5@6": 0.8947368421052632,
+   "L/2@6": 0.8115183246073299,
+   "L@6": 0.7146596858638743,
+   "L/5@12": 0.9342105263157895,
+   "L/2@12": 0.837696335078534,
+   "L@12": 0.725130890052356,
+   "L/5@24": 0.9078947368421053,
+   "L/2@24": 0.7801047120418848,
+   "L@24": 0.6858638743455497
+  },
+  "precision_jdca": {
+   "L/5@6": 0.8947368421052632,
+   "L/2@6": 0.8115183246073299,
+   "L@6": 0.7146596858638743,
+   "L/5@12": 0.9342105263157895,
+   "L/2@12": 0.837696335078534,
+   "L@12": 0.725130890052356,
+   "L/5@24": 0.9078947368421053,
+   "L/2@24": 0.7801047120418848,
+   "L@24": 0.6858638743455497
+  },
+  "precision_ridge": {
+   "L/5@6": 0.9078947368421053,
+   "L/2@6": 0.806282722513089,
+   "L@6": 0.7172774869109948,
+   "L/5@12": 0.9210526315789473,
+   "L/2@12": 0.8272251308900523,
+   "L@12": 0.7539267015706806,
+   "L/5@24": 0.8947368421052632,
+   "L/2@24": 0.7853403141361257,
+   "L@24": 0.7277486910994765
+  },
+  "precision_jdca_adaptive": {
+   "L/5@6": 0.8947368421052632,
+   "L/2@6": 0.7591623036649214,
+   "L@6": 0.675392670157068,
+   "L/5@12": 0.9078947368421053,
+   "L/2@12": 0.7905759162303665,
+   "L@12": 0.7172774869109948,
+   "L/5@24": 0.881578947368421,
+   "L/2@24": 0.7905759162303665,
+   "L@24": 0.6858638743455497
+  },
+  "guard": {
+   "clean": true,
+   "start": "2026-10-09 20:22:17",
+   "wall_s": 182.4,
+   "cores": "1,10,9,11,7,8,0,6",
+   "other_gpu_seconds": 0,
+   "other_cpu_on_cores_max_share_10s": 0.108,
+   "other_cpu_machine_mean": 1.28
+  }
+ },
+ "P57740": {
+  "M_file": 1883,
+  "M": 1647,
+  "L": 925,
+  "plddt_ge70": 0.7664864864864865,
+  "gaussdca_jl": {
+   "t1": {
+    "DCAUtils": {
+     "git_tree_sha1": "434e75b436dfb1921224484adcbb809aeed93568",
+     "version": "1.1.0"
+    },
+    "FastaIO": {
+     "git_tree_sha1": "0133228b2353194fe0703d8cba182f832e11bb54",
+     "version": "1.1.0"
+    },
+    "GaussDCA": {
+     "git_rev": "067016f035d13e0cc9eb7be7a3d8cbe857a322b3",
+     "git_tree_sha1": "f306a33661bdfbf133d24c3772734caff8da1f4c",
+     "version": "2.0.0"
+    },
+    "M": 1647,
+    "Meff": 322.4470070839634,
+    "N": 925,
+    "blas": "libopenblas64_.so",
+    "blas_threads": 1,
+    "cold_jit_s": 7.165972314,
+    "cpu": "Intel(R) Xeon(R) Silver 4214R CPU @ 2.40GHz",
+    "identical_runs": true,
+    "input": "bench/out/P57740/aln.fasta",
+    "julia": "1.10.12",
+    "max_gap_fraction": 0.9,
+    "n_pairs": 423660,
+    "nthreads": 1,
+    "output": "bench/out/P57740/jl_t1.txt",
+    "pseudocount": 0.8,
+    "t_gc_s": 0.680889595,
+    "t_gdca_cold_s": 218.685498854,
+    "t_gdca_warm_s": 211.698791008,
+    "t_load_s": 0.05654001235961914,
+    "t_stats_s": 0.23613691329956055,
+    "t_total_s": 432.82889103889465,
+    "t_write_s": 1.3215339183807373,
+    "theta": 0.27197330520459084,
+    "theta_arg": "auto",
+    "tool": "GaussDCA.jl",
+    "warm_alloc_bytes": 20649231680,
+    "warm_gc_s": 1.350571378,
+    "warm_jit_s": 0.0,
+    "process_wall": 434.9968436150002,
+    "one_off": 222.38102609870066
+   },
+   "t8": {
+    "DCAUtils": {
+     "git_tree_sha1": "434e75b436dfb1921224484adcbb809aeed93568",
+     "version": "1.1.0"
+    },
+    "FastaIO": {
+     "git_tree_sha1": "0133228b2353194fe0703d8cba182f832e11bb54",
+     "version": "1.1.0"
+    },
+    "GaussDCA": {
+     "git_rev": "067016f035d13e0cc9eb7be7a3d8cbe857a322b3",
+     "git_tree_sha1": "f306a33661bdfbf133d24c3772734caff8da1f4c",
+     "version": "2.0.0"
+    },
+    "M": 1647,
+    "Meff": 322.4470070839634,
+    "N": 925,
+    "blas": "libopenblas64_.so",
+    "blas_threads": 8,
+    "cold_jit_s": 9.673076645,
+    "cpu": "Intel(R) Xeon(R) Silver 4214R CPU @ 2.40GHz",
+    "identical_runs": true,
+    "input": "bench/out/P57740/aln.fasta",
+    "julia": "1.10.12",
+    "max_gap_fraction": 0.9,
+    "n_pairs": 423660,
+    "nthreads": 8,
+    "output": "bench/out/P57740/jl_t8.txt",
+    "pseudocount": 0.8,
+    "t_gc_s": 0.643657435,
+    "t_gdca_cold_s": 53.894673715,
+    "t_gdca_warm_s": 47.122669147,
+    "t_load_s": 0.0563509464263916,
+    "t_stats_s": 0.1251978874206543,
+    "t_total_s": 103.31776094436646,
+    "t_write_s": 1.3343210220336914,
+    "theta": 0.2719733052045915,
+    "theta_arg": "auto",
+    "tool": "GaussDCA.jl",
+    "warm_alloc_bytes": 20649432128,
+    "warm_gc_s": 1.063216706,
+    "warm_jit_s": 0.0,
+    "process_wall": 105.63101424899924,
+    "one_off": 57.73948977957858
+   }
+  },
+  "jdca": {
+   "gpu_one_off": 2.3929757739997513,
+   "cpu_one_off": 7.885034013999757,
+   "gpu_batch": 0.27677371299978404,
+   "cpu_batch": 6.090915774000678,
+   "gpu_server": 0.9229194460003782,
+   "theta": 0.2719733052045915,
+   "meff": 322.44700708396357,
+   "adaptive_gpu_batch": 0.2888194530005421,
+   "adaptive_meff": 525.8005952835811,
+   "adaptive_pseudocount": 0.9041972972972973
+  },
+  "agreement": {
+   "max_abs": 9.76978944189355e-07,
+   "max_rel": 8.739920866580087e-07,
+   "spearman": 0.9999999999899363,
+   "topL_shared": 1.0
+  },
+  "precision_jl": {
+   "L/5@6": 0.34594594594594597,
+   "L/2@6": 0.21212121212121213,
+   "L@6": 0.1437837837837838,
+   "L/5@12": 0.31351351351351353,
+   "L/2@12": 0.18831168831168832,
+   "L@12": 0.12432432432432433,
+   "L/5@24": 0.21621621621621623,
+   "L/2@24": 0.12121212121212122,
+   "L@24": 0.08
+  },
+  "precision_jdca": {
+   "L/5@6": 0.34594594594594597,
+   "L/2@6": 0.21212121212121213,
+   "L@6": 0.1437837837837838,
+   "L/5@12": 0.31351351351351353,
+   "L/2@12": 0.18831168831168832,
+   "L@12": 0.12432432432432433,
+   "L/5@24": 0.21621621621621623,
+   "L/2@24": 0.12121212121212122,
+   "L@24": 0.08
+  },
+  "precision_ridge": {
+   "L/5@6": 0.35135135135135137,
+   "L/2@6": 0.20995670995670995,
+   "L@6": 0.13513513513513514,
+   "L/5@12": 0.3081081081081081,
+   "L/2@12": 0.16883116883116883,
+   "L@12": 0.1254054054054054,
+   "L/5@24": 0.1837837837837838,
+   "L/2@24": 0.1038961038961039,
+   "L@24": 0.08756756756756756
+  },
+  "precision_jdca_adaptive": {
+   "L/5@6": 0.31891891891891894,
+   "L/2@6": 0.19480519480519481,
+   "L@6": 0.15243243243243243,
+   "L/5@12": 0.3081081081081081,
+   "L/2@12": 0.17532467532467533,
+   "L@12": 0.1264864864864865,
+   "L/5@24": 0.1945945945945946,
+   "L/2@24": 0.12554112554112554,
+   "L@24": 0.0972972972972973
+  },
+  "guard": {
+   "clean": true,
+   "start": "2026-10-09 21:24:49",
+   "wall_s": 614.8,
+   "cores": "8,11,6,10,3,7,1,5",
+   "other_gpu_seconds": 0,
+   "other_cpu_on_cores_max_share_10s": 0.048,
+   "other_cpu_machine_mean": 0.08
+  }
+ }
+}
