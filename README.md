@@ -8,7 +8,7 @@ By default it computes exactly GaussDCA.jl's estimator, with the same settings a
 
 * **Same answer.** jdca's scores equal a float64 transcription of GaussDCA.jl to float32 precision, and the reweighting threshold θ
   and Meff agree with GaussDCA.jl's to the last printed digit. The side-by-side comparison with GaussDCA.jl is in
-  [docs/benchmark.md](docs/benchmark.md).
+  [docs/benchmark.md][benchmark].
 * **Fast.** In a running process, one coupling map of the three benchmark targets takes from a few hundredths of a second to under
   a second on one GPU: 10–170× less than GaussDCA.jl on 8 CPU threads. A one-off `jdca` command adds about 1.5 s of GPU start-up,
   which the optional server removes (see [How long a map takes](#how-long-a-map-takes)).
@@ -71,12 +71,13 @@ counts are compiled XLA kernels on both devices.
 ## Install
 
 ```
-pip install -e .              # CPU
-pip install -e ".[cuda]"      # with JAX for CUDA 12
+pip install jdca              # CPU
+pip install "jdca[cuda]"      # with JAX for CUDA 12
 ```
 
-Requires Python ≥ 3.10, NumPy, SciPy and JAX (tested with JAX 0.9.2, and with JAX 0.4.30 on the CPU). The benchmark scripts also need biotite
-(`pip install -e ".[bench]"`), and `bench/metrics.py` needs DSSP's `mkdssp` (conda-forge package `dssp`).
+Requires Python ≥ 3.10, NumPy, SciPy and JAX (tested with JAX 0.9.2, and with JAX 0.4.30 on the CPU). The benchmark scripts are in
+this repository, not in the package: in a clone, `pip install -e ".[bench]"` adds the biotite they need, and `bench/metrics.py` also
+needs DSSP's `mkdssp` (conda-forge package `dssp`).
 
 ## Use
 
@@ -110,7 +111,7 @@ The benchmarks report three numbers, for three ways of using jdca:
 A one-off command on the GPU spends about 1.5 s starting Python, JAX and the GPU before its first map. In a batch that is paid once
 per process; with the server, once per server. The first alignment of a new size class also loads (or, the very first time,
 compiles) its programs. On the benchmark targets a map then costs 0.04–0.6 s on the GPU in a batch, 0.2–0.9 s as a command with
-the server running, and 1.7–2.4 s as a one-off command ([docs/benchmark.md](docs/benchmark.md)).
+the server running, and 1.7–2.4 s as a one-off command ([docs/benchmark.md][benchmark]).
 
 ## Add-ons
 
@@ -137,7 +138,7 @@ suspended process, say) is treated as absent: the client computes locally, and `
 ### Adaptive mode
 
 `mode='adaptive'` (`--mode adaptive`) is a second setting of the same estimator: an adaptive pseudocount, a fixed identity threshold
-for the reweighting, no gap filter. The settings and its results are in [docs/adaptive.md](docs/adaptive.md).
+for the reweighting, no gap filter. The settings and its results are in [docs/adaptive.md][adaptive].
 
 ### Windowed map for long chains
 
@@ -151,7 +152,7 @@ columns instead:
 
 On six AlphaFold DB entries its top-L/5 contact precision is within −0.10 to +0.14 of the whole-chain map's. On the four chains of
 968–1,203 residues it takes 1.1–1.6 s per map on the GPU, against 1.9–5.8 s for the whole-chain map; it matters most where the
-whole-chain map no longer fits in GPU memory and would be computed on the CPU ([docs/windowed.md](docs/windowed.md)).
+whole-chain map no longer fits in GPU memory and would be computed on the CPU ([docs/windowed.md][windowed]).
 
 ### Ridge DCA, and the DCA of Humphreys et al.
 
@@ -163,7 +164,7 @@ programs, server):
 * **`jdca.humphreys_dca`** (`--method humphreys`) is their estimator with their settings: every sequence kept, weights
   1 / #{sequences with identity > 0.8 L}, the 21-state covariance (the gap is a state) plus one ridge 4.5 / √Meff, and per position
   pair the Frobenius norm of the raw 20 × 20 non-gap block of `C⁻¹`, then APC. On the benchmark targets it reproduces their script's
-  scores to 5e-4 or better and shares all of its top-L pairs ([docs/comparison.md](docs/comparison.md)).
+  scores to 5e-4 or better and shares all of its top-L pairs ([docs/comparison.md][comparison]).
 * **`jdca.ridge_dca`** (`--method ridge`) is a variant of it: a per-column ridge λᵢ = c / √nᵢ (nᵢ = the column's weighted non-gap
   count, c = 4.07) instead of one ridge, and pairs scored by partial correlations, the Frobenius norm of the 20 × 20 non-gap block of
   `Pᵢⱼ,ₐᵦ / √(Pᵢᵢ,ₐₐ Pⱼⱼ,ᵦᵦ)` (`P = C⁻¹`), then APC. `column_ridge=False`, `score='fn'` and `c` give the intermediate settings.
@@ -172,7 +173,7 @@ Neither has a windowed form or a CPU fallback for GPU memory; on the CPU they ru
 
 Which estimator to use? On seven AlphaFold DB entries, scored with seven contact metrics (six of them at three list lengths),
 GaussDCA, its adaptive mode, the estimator of Humphreys et al. and the ridge DCA are within 0.023 of each other on every
-precision, recall and coverage mean, and none is consistently best ([docs/comparison.md](docs/comparison.md#other-contact-metrics)).
+precision, recall and coverage mean, and none is consistently best ([docs/comparison.md][metrics]).
 
 ```
 jdca alignment.a3m --mode adaptive                  # adaptive mode
@@ -204,7 +205,7 @@ r = jdca.ridge_dca('alignment.a3m')
 ## Tests
 
 ```
-pip install -e ".[test]"
+pip install -e ".[test]"      # in a clone of this repository
 PYTHONPATH=.:tests pytest tests
 ```
 
@@ -234,3 +235,9 @@ Gloor (2008).
   its supplementary Methods M5.3.
 * S. D. Dunn, L. M. Wahl, G. B. Gloor. Mutual information without the influence of phylogeny or entropy dramatically improves
   residue contact prediction. *Bioinformatics* 24, 333–340 (2008).
+
+[benchmark]: https://github.com/aozalevsky/jdca/blob/main/docs/benchmark.md
+[adaptive]: https://github.com/aozalevsky/jdca/blob/main/docs/adaptive.md
+[windowed]: https://github.com/aozalevsky/jdca/blob/main/docs/windowed.md
+[comparison]: https://github.com/aozalevsky/jdca/blob/main/docs/comparison.md
+[metrics]: https://github.com/aozalevsky/jdca/blob/main/docs/comparison.md#other-contact-metrics
