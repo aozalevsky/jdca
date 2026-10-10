@@ -289,7 +289,10 @@ def test_server():
     """A server on a private socket: results equal the local GPU call, also with several threads in one client."""
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     d = tempfile.mkdtemp()                                        # mode 0700
-    env = dict(os.environ, JDCA_SOCKET=os.path.join(d, 'server.sock'), PYTHONPATH=os.pathsep.join([root, os.path.join(root, 'tests')]))
+    # No preallocation for the client either: by default it takes what this process leaves of the GPU, and a server that has to
+    # compile a program (an empty cache) then runs out of memory.
+    env = dict(os.environ, JDCA_SOCKET=os.path.join(d, 'server.sock'),
+               PYTHONPATH=os.pathsep.join([root, os.path.join(root, 'tests')]), XLA_PYTHON_CLIENT_PREALLOCATE='false')
     srv = subprocess.Popen([sys.executable, '-m', 'jdca.server', 'start', '--foreground'], env=env, stdout=subprocess.DEVNULL,
                            stderr=subprocess.DEVNULL)
     try:

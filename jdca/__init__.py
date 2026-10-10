@@ -4,7 +4,7 @@ from .gauss import DCA, apc, gaussdca
 from .ridge import humphreys_dca, ridge_dca
 from .weights import identity_counts, mean_identity, sequence_weights
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 
 
 def ranking(scores, min_separation=5):

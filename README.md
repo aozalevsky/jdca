@@ -75,9 +75,9 @@ pip install jdca              # CPU
 pip install "jdca[cuda]"      # with JAX for CUDA 12
 ```
 
-Requires Python ≥ 3.10, NumPy, SciPy and JAX (tested with JAX 0.9.2, and with JAX 0.4.30 on the CPU). The benchmark scripts are in
-this repository, not in the package: in a clone, `pip install -e ".[bench]"` adds the biotite they need, and `bench/metrics.py` also
-needs DSSP's `mkdssp` (conda-forge package `dssp`).
+Requires Python ≥ 3.10, NumPy, SciPy and JAX (tested with JAX 0.9.2 and 0.11.2, and with JAX 0.4.30 on the CPU). The benchmark
+scripts are in this repository, not in the package: in a clone, `pip install -e ".[bench]"` adds the biotite they need, and
+`bench/metrics.py` also needs DSSP's `mkdssp` (conda-forge package `dssp`).
 
 ## Use
 
